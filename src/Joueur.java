@@ -9,7 +9,6 @@ public class Joueur {
             JoueurActuel = 1;
         }
         return JoueurActuel;
-
     }
 }
 

@@ -7,7 +7,6 @@ public class Main {
         int taille;
         int pierre_blanc = 'B';
         int pierre_noir = 'N';
-        int joueurActuel = 1;
 
         do{
             System.out.println("Quelle taille choissisez-vous : 9, 13, 19 ");
@@ -26,7 +25,7 @@ public class Main {
                     "                                                                       ▒▒█████████  ▒▒▒███████▒   ███████████  █████   █████ █████  ▒▒█████\n" +
                     "                                                                         ▒▒▒▒▒▒▒▒▒     ▒▒▒▒▒▒▒    ▒▒▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒   ▒▒▒▒▒ ▒▒▒▒▒    ▒▒▒▒▒ ");
 
-        System.out.println("Le joueur numero 1 possede les pierre blanche \nLe joueur numero 2 possede les pierre noir");
+        System.out.println("Le Joueur1 Pierre blanche \n Le Joueur2 Pierre noir");
         launcher.lancerPartie(Goban);
     }
 

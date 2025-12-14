@@ -122,21 +122,17 @@ public class Plateau {
         return pierre;
     }
     public static boolean EmplacementVide(char[][] plateau, int x, int y, char pierre) {
-        return plateau[x][y] !=  pierre;
+        return plateau[x][y] !=  'B' && plateau[x][y] != 'N';
     }
     public static boolean verifierDehorsDesLimites(char[][] plateau, int x, int y) {
-        return x < 0 || x > plateau.length || y < 0 || y > plateau.length;
+        return x < 0 || x >= plateau.length || y < 0 || y >= plateau.length;
     }
     public static boolean verifierSiPierrePoser (char[][] plateau, int x, int y, char pierre){
-        return verifierDehorsDesLimites(plateau, x, y) && EmplacementVide (plateau, x, y,  pierre);
+        return !verifierDehorsDesLimites(plateau, x, y) && EmplacementVide (plateau, x, y,  pierre);
     }
     public static void poserPierre(char[][] plateau , int x, int y, char pierre ,int JoueurActuelle){
         if(verifierSiPierrePoser(plateau, x, y, pierre)){
             plateau[x][y] = pierre;
         }
-    }
-    public static int demanderCoup(int x, int y){
-        System.out.println("Quel est votre coup");
-        return 0;
     }
 }
