@@ -1,32 +1,31 @@
-import java.sql.SQLOutput;
-import java.util.Scanner;
 public class Main {
-    final static char VIDE = '_';
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int taille;
-        int pierre_blanc = 'B';
-        int pierre_noir = 'N';
+    public static void lancerPartie(char[][] Goban) {
+        boolean finDeJeu = false;
+        int JoueurActuel = 1;
+        int passeTour = 0;
+        char pierre = MethodePlateau.pierreActuel(JoueurActuel, 'N', 'B');
+        boolean coupValide = false;
+        while (!finDeJeu) {
+            do {
+                int[] coup = Jeu.demanderCoup(JoueurActuel, Goban);
+                int x = coup[0];
+                int y = coup[1];
+                // verifier dans x ou y si il y a null et incrementer le compteur de 1
+                pierre = MethodePlateau.pierreActuel(JoueurActuel, 'N', 'B');
+                if (MethodePlateau.verifierSiPierrePoser(Goban, x, y, pierre)) {
+                    MethodePlateau.poserPierre(Goban, x, y, pierre, JoueurActuel);
+                    coupValide = true;
+                } else {
+                    System.out.println("Ce coup est invalide");
+                    coupValide = false;
+                }
+                // Probleme n°2 Changer la fonction Emplacement vide, faire utiliser des parametre au lieu de 'N' et 'B' car possiblilté de demander a l'users de choisir ces pierre
+            }while(!coupValide);
+            JoueurActuel = Jeu.changerJoueur(JoueurActuel);
+            MethodePlateau.AffichageGoban(Goban);
 
-        do{
-            System.out.println("Quelle taille choissisez-vous : 9, 13, 19 ");
-            taille = sc.nextInt();
         }
-        while(taille != 9 && taille  != 13 &&  taille != 19);
-        // Creation
-        char[][] Goban = Plateau.creationGoban(taille);
-        // Affichage du TITRE du Jeu
-            System.out.println("                                                                         █████████     ███████    ███████████    █████████   ██████   █████\n" +
-                    "                                                                        ███▒▒▒▒▒███  ███▒▒▒▒▒███ ▒▒███▒▒▒▒▒███  ███▒▒▒▒▒███ ▒▒██████ ▒▒███ \n" +
-                    "                                                                       ███     ▒▒▒  ███     ▒▒███ ▒███    ▒███ ▒███    ▒███  ▒███▒███ ▒███ \n" +
-                    "                                                                      ▒███         ▒███      ▒███ ▒██████████  ▒███████████  ▒███▒▒███▒███ \n" +
-                    "                                                                      ▒███    █████▒███      ▒███ ▒███▒▒▒▒▒███ ▒███▒▒▒▒▒███  ▒███ ▒▒██████ \n" +
-                    "                                                                      ▒▒███  ▒▒███ ▒▒███     ███  ▒███    ▒███ ▒███    ▒███  ▒███  ▒▒█████ \n" +
-                    "                                                                       ▒▒█████████  ▒▒▒███████▒   ███████████  █████   █████ █████  ▒▒█████\n" +
-                    "                                                                         ▒▒▒▒▒▒▒▒▒     ▒▒▒▒▒▒▒    ▒▒▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒   ▒▒▒▒▒ ▒▒▒▒▒    ▒▒▒▒▒ ");
-
-        System.out.println("Le Joueur1 Pierre blanche \n Le Joueur2 Pierre noir");
-        launcher.lancerPartie(Goban);
     }
+
 
 }

@@ -1,9 +1,10 @@
-public class Plateau {
+import java.util.Scanner;
+
+public class MethodePlateau {
     public static void main(String[] args) {
         char[][] Goban = creationGoban((9));
         AffichageGoban(Goban);
     }
-
     public static char[][] creationGoban(int taille) {
         char[][] plateau_Goban = new char[taille][taille];
         // boucle qui cree le tableau
@@ -52,9 +53,16 @@ public class Plateau {
     }
     public static void AffichageGoban(char[][] plateau) {
         /*boucle qui affiche le tableau*/
-        for (int ligne = 0; ligne < plateau.length; ligne++) {
-            for (int colonne = 0; colonne < plateau[ligne].length; colonne++) {
+        System.out.print("   ");
+        for (int coordX = 0 ; coordX< plateau.length ; coordX ++ ){
+            if (coordX== plateau.length-1)
+                System.out.println(coordX );
+            else System.out.print(coordX+"    ");
 
+        }
+        for (int ligne = 0; ligne < plateau.length; ligne++) {
+            System.out.print(ligne +"  ");
+            for (int colonne = 0; colonne < plateau[ligne].length; colonne++) {
                 /*affichage premiere ligne */
                 if (ligne == 0) {
                     if (colonne == 0) {
@@ -68,6 +76,7 @@ public class Plateau {
                     if (colonne == (plateau.length - 1)) {
                         System.out.print(plateau[ligne][colonne]);
                     }
+
                 }
 
                 /*affichage des lignes du milieu */
@@ -105,8 +114,12 @@ public class Plateau {
             System.out.println("");
             if (ligne != plateau.length - 1) {
                 for (int barre=0 ; barre < plateau.length ;barre ++) {
-                    System.out.print("|    ");
-
+                    if (barre==0) {
+                        System.out.print("   |    ");
+                    }
+                    else{
+                        System.out.print("|    ");
+                    }
                 }
                 System.out.println();
             }
@@ -121,6 +134,7 @@ public class Plateau {
             pierre = pierre_noir;
         return pierre;
     }
+    // retourne vrai si emplacement vide
     public static boolean EmplacementVide(char[][] plateau, int x, int y, char pierre) {
         return plateau[x][y] !=  'B' && plateau[x][y] != 'N';
     }
