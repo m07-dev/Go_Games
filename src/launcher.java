@@ -1,12 +1,14 @@
 import java.util.Scanner;
 public class launcher {
-    final static char VIDE = '_';
+    final static char PIERRENOIRE = 'N';
+    final static char PIERREBLANCHE = 'B';
+
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         int BoutonLancer;
         int taille;
-        int pierre_blanc = 'B';
-        int pierre_noir = 'N';
+        int pierre_blanc = PIERREBLANCHE;
+        int pierre_noir = PIERRENOIRE;
         System.out.println();
         // Affichage du TITRE du Jeu
         System.out.println("                                                                         █████████     ███████    ███████████    █████████   ██████   █████\n" +

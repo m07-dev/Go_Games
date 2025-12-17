@@ -27,11 +27,13 @@ public class Main {
                 }
                 if(passeTour == 2){
                     System.out.println("Vous avez tous deux passer votre tour c'est la fin du JEU");
+                    coupValide = true;
                     finDeJeu = true;
-                }
+                }git add
+                finDeJeu = MethodePlateau.GobanRempli(Goban);
                 // Probleme n°2 Changer la fonction Emplacement vide, faire utiliser des parametre au lieu de 'N' et 'B' car possiblilté de demander a l'users de choisir ces pierre
-            }while(!coupValide);
             JoueurActuel = Jeu.changerJoueur(JoueurActuel);
+            }while(!coupValide);
             MethodePlateau.AffichageGoban(Goban);
 
         }

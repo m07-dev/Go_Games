@@ -23,14 +23,41 @@ public class Jeu {
             x = sc.nextInt();
             System.out.println("Joueur n°" + JoueurActuel + ", Tapez un coup pour la  position Y OU taper -1 pour PASSER ?");
             y = sc.nextInt();
-        } while (x < -1 || x >= Goban.length || y < -1 || y >= Goban.length);
+        } while (x < -1 || x >= Goban.length || y < -1 || y >= Goban.length); // mettre x et y a -1 au pour accepter les tourPasser
 
         return new int[]{x, y};
     }
-
-    public static int CompterGroupe(char[][] Goban, int x , int y, char pierre){
+    // Methode qui permet de stocker les groupevivant deja visitée
+    public static boolean[][] CreationTableauGroupeVisitee(char[][] Goban, int x, int y){
+        boolean[][] Visitee = new boolean[Goban.length][Goban.length];
+        for (int i = 0; i < Goban.length; i++) {
+            for (int j = 0; j < Goban.length; j++) {
+                Visitee[x][y] = false;
+            }
+        }
+        return Visitee;
     }
 
+    // Methode qui permet de compter le nombre de GroupVivant
+    public static int CompterGroupe(char[][] Goban, int x, int y, char pierre, boolean[][] GroupeVisitee){
+        int taille;
+        if (MethodePlateau.verifierDehorsDesLimites(Goban,x,y)){
+            return 0;
+        }
+        if(GroupeVisitee[x][y]){
+            return 0;
+        }
+        if(Goban[x][y] != pierre){
+            return 0;
+        }
+        GroupeVisitee[x][y]= true;
+        taille = CompterGroupe(Goban, x+1, y, pierre, GroupeVisitee) + 1;
+        taille = CompterGroupe(Goban, x-1, y, pierre, GroupeVisitee) + 1;
+        taille = CompterGroupe(Goban, x, y+1, pierre, GroupeVisitee) + 1;
+        taille = CompterGroupe(Goban, x, y-1, pierre, GroupeVisitee) + 1;
+
+        return taille;
+    }
 
 
 }
