@@ -11,13 +11,23 @@ public class Main {
                 int x = coup[0];
                 int y = coup[1];
                 // verifier dans x ou y si il y a null et incrementer le compteur de 1
-                pierre = MethodePlateau.pierreActuel(JoueurActuel, 'N', 'B');
-                if (MethodePlateau.verifierSiPierrePoser(Goban, x, y, pierre)) {
-                    MethodePlateau.poserPierre(Goban, x, y, pierre, JoueurActuel);
-                    coupValide = true;
-                } else {
-                    System.out.println("Ce coup est invalide");
-                    coupValide = false;
+                if(coup[0] == -1 && coup[1] == -1){
+                    passeTour++;
+
+                }else {
+                    pierre = MethodePlateau.pierreActuel(JoueurActuel, 'N', 'B');
+                    if (MethodePlateau.verifierSiPierrePoser(Goban, x, y, pierre)) {
+                        MethodePlateau.poserPierre(Goban, x, y, pierre, JoueurActuel);
+                        coupValide = true;
+                    } else {
+                        System.out.println("Ce coup est invalide");
+                        coupValide = false;
+                    }
+                    passeTour = 0;
+                }
+                if(passeTour == 2){
+                    System.out.println("Vous avez tous deux passer votre tour c'est la fin du JEU");
+                    finDeJeu = true;
                 }
                 // Probleme n°2 Changer la fonction Emplacement vide, faire utiliser des parametre au lieu de 'N' et 'B' car possiblilté de demander a l'users de choisir ces pierre
             }while(!coupValide);

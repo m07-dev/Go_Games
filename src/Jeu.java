@@ -19,16 +19,19 @@ public class Jeu {
         do {
             Scanner sc = new Scanner(System.in);
             // demander une saisie pour passez le tour utiliser le null
-            System.out.println("Joueur n°" + JoueurActuel + " , Quel est votre coup en position X ?");
+            System.out.println("Joueur n°" + JoueurActuel + " , Tapez un coup pour la position X OU taper -1 pour PASSER ?");
             x = sc.nextInt();
-            System.out.println("Joueur n°" + JoueurActuel + ", Quel est votre coup en position Y ?");
+            System.out.println("Joueur n°" + JoueurActuel + ", Tapez un coup pour la  position Y OU taper -1 pour PASSER ?");
             y = sc.nextInt();
-
-        } while (x < 0 || x >= Goban.length || y < 0 || y >= Goban.length);
+        } while (x < -1 || x >= Goban.length || y < -1 || y >= Goban.length);
 
         return new int[]{x, y};
     }
 
-    /*public static int passertour(int JoueurActuel){}*/
+    public static int CompterGroupe(char[][] Goban, int x , int y, char pierre){
+    }
+
+
+
 }
 
