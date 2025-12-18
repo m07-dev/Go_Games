@@ -27,7 +27,7 @@ public class Jeu {
 
         return new int[]{x, y};
     }
-    // Methode qui permet de stocker les groupevivant deja visitée
+    // Fonction qui permet de creer un tableau de boolean pour verifier si un groupe de pierre est visite
     public static boolean[][] CreationTableauGroupeVisitee(char[][] Goban){
         boolean[][] Visitee = new boolean[Goban.length][Goban.length];
         for (int i = 0; i < Goban.length; i++) {
@@ -38,7 +38,7 @@ public class Jeu {
         return Visitee;
     }
 
-    // Methode qui permet de compter la taille d'un Groupe de Pierre
+    // Fonction qui permet de compter le nombre de pierre dans un groupe
         public static int CompterGroupe(char[][] Goban, int x, int y, char pierre, boolean[][] GroupeVisitee){
             if (MethodePlateau.verifierDehorsDesLimites(Goban,x,y)){
                 return 0;
@@ -58,7 +58,8 @@ public class Jeu {
 
             return taille;
         }
-        public static boolean estGroupeVivant(char[][] Goban, int x, int y, char pierre, boolean[][] Visitee){
+        // Fonction qui permet de verifier si un groupe de pierre est vivant
+        /*public static boolean estGroupeVivant(char[][] Goban, int x, int y, char pierre, boolean[][] Visitee){
             if(MethodePlateau.verifierDehorsDesLimites(Goban,x,y)){
                 return false;
             }
@@ -78,7 +79,7 @@ public class Jeu {
             estGroupeVivant(Goban, x-1, y, pierre, Visitee);
             estGroupeVivant(Goban, x, y+1, pierre, Visitee);
             estGroupeVivant(Goban, x, y-1, pierre, Visitee);
-        }
+        }*/
 
 }
 

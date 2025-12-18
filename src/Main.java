@@ -12,7 +12,6 @@ public class Main {
         while (!finDeJeu) {
 
             //Boucle ( DO WHILE ) qui demande la saisie au joueur les coordones de son coup et qui verifie si il est possible
-
             do {
                 // creation d'un tableau rempli de false que l'on utilise pour compter la taille des groupe
 
@@ -61,13 +60,13 @@ public class Main {
 
             }while(!coupValide);
 
-            // une fois le coup jouee on affiche le plateau actuelle
+            // une fois le coup joue on affiche le plateau actuelle
 
             MethodePlateau.AffichageGoban(Goban);
 
             //
 
-            System.out.println(tailleGroupe + "Voici la taille");
+            System.out.println(tailleGroupe + " est la taille de la pierre : " + pierre);
 
             // changement de joueur a chaque tour
 
