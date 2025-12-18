@@ -28,37 +28,57 @@ public class Jeu {
         return new int[]{x, y};
     }
     // Methode qui permet de stocker les groupevivant deja visitée
-    public static boolean[][] CreationTableauGroupeVisitee(char[][] Goban, int x, int y){
+    public static boolean[][] CreationTableauGroupeVisitee(char[][] Goban){
         boolean[][] Visitee = new boolean[Goban.length][Goban.length];
         for (int i = 0; i < Goban.length; i++) {
             for (int j = 0; j < Goban.length; j++) {
-                Visitee[x][y] = false;
+                Visitee[i][j] = false;
             }
         }
         return Visitee;
     }
 
-    // Methode qui permet de compter le nombre de GroupVivant
-    public static int CompterGroupe(char[][] Goban, int x, int y, char pierre, boolean[][] GroupeVisitee){
-        int taille;
-        if (MethodePlateau.verifierDehorsDesLimites(Goban,x,y)){
-            return 0;
-        }
-        if(GroupeVisitee[x][y]){
-            return 0;
-        }
-        if(Goban[x][y] != pierre){
-            return 0;
-        }
-        GroupeVisitee[x][y]= true;
-        taille = CompterGroupe(Goban, x+1, y, pierre, GroupeVisitee) + 1;
-        taille = CompterGroupe(Goban, x-1, y, pierre, GroupeVisitee) + 1;
-        taille = CompterGroupe(Goban, x, y+1, pierre, GroupeVisitee) + 1;
-        taille = CompterGroupe(Goban, x, y-1, pierre, GroupeVisitee) + 1;
+    // Methode qui permet de compter la taille d'un Groupe de Pierre
+        public static int CompterGroupe(char[][] Goban, int x, int y, char pierre, boolean[][] GroupeVisitee){
+            if (MethodePlateau.verifierDehorsDesLimites(Goban,x,y)){
+                return 0;
+            }
+            if(GroupeVisitee[x][y]){
+                return 0;
+            }
+            if(Goban[x][y] != pierre){
+                return 0;
+            }
+            int taille = 1;
+            GroupeVisitee[x][y]= true;
+            taille += CompterGroupe(Goban, x+1, y, pierre, GroupeVisitee);
+            taille += CompterGroupe(Goban, x-1, y, pierre, GroupeVisitee);
+            taille += CompterGroupe(Goban, x, y+1, pierre, GroupeVisitee);
+            taille += CompterGroupe(Goban, x, y-1, pierre, GroupeVisitee);
 
-        return taille;
-    }
+            return taille;
+        }
+        public static boolean estGroupeVivant(char[][] Goban, int x, int y, char pierre, boolean[][] Visitee){
+            if(MethodePlateau.verifierDehorsDesLimites(Goban,x,y)){
+                return false;
+            }
+            if(Visitee[x][y]){
+                return false;
+            }
 
+            if (Goban[x][y] != pierre){
+                return false;
+            }
+            // SI on trouve un emplacement vide alors je ne suis pas
+            if(Goban[x][y] == '*'){
+                return true;
+            }
+            Visitee[x][y] = true;
+            estGroupeVivant(Goban, x+1, y, pierre, Visitee);
+            estGroupeVivant(Goban, x-1, y, pierre, Visitee);
+            estGroupeVivant(Goban, x, y+1, pierre, Visitee);
+            estGroupeVivant(Goban, x, y-1, pierre, Visitee);
+        }
 
 }
 
