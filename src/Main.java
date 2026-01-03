@@ -1,111 +1,110 @@
 public class Main {
-    public static void lancerPartie(char[][] Goban) {
+    // Note : On reçoit maintenant un int[][] (tableau d'entiers)
+    public static void lancerPartie(int[][] Goban) {
         boolean finDeJeu = false;
         int JoueurActuel = 2;
         int passeTour = 0;
-        char pierre = MethodePlateau.pierreActuel(JoueurActuel, MethodePlateau.PIERRENOIRE, MethodePlateau.PIERREBLANCHE);
+
+        // MAJ : 'pierre' est maintenant un int (1 ou 2)
+        // La nouvelle fonction pierreActuel ne prend plus que le joueur en paramètre
+        int pierre = MethodePlateau.pierreActuel(JoueurActuel);
+
         int tailleGroupe = 1;
         boolean coupValide = false;
 
-        // boucle principale du jeu qui continue tant que la partie n'est pas finie
-
         while (!finDeJeu) {
-
-            //Boucle ( DO WHILE ) qui demande la saisie au joueur les coordones de son coup et qui verifie s'il est possible
             do {
-                // creation d'un tableau rempli de false que l'on utilise pour compter la taille des groupes
-
-                boolean[][] Visitee = Jeu.CreationTableauGroupeVisitee(Goban);
-
-                // demande a l'utilisateur de saisir les coordonee
+                // boolean[][] Visitee = Jeu.CreationTableauGroupeVisitee(Goban);
 
                 int[] coup = Jeu.demanderCoup(JoueurActuel, Goban);
                 int x = coup[0];
                 int y = coup[1];
 
-                // joueur passe son tour
-
+                // 1. CAS : LE JOUEUR PASSE
                 if(coup[0] == -1 && coup[1] == -1){
                     passeTour++;
                     coupValide = true;
-
+                    System.out.println("Le joueur " + JoueurActuel + " passe son tour.");
                 }
-
-                // verification des coordonees
+                // 2. CAS : LE JOUEUR JOUE
                 else {
-                    /// le coup est valide
-                    pierre = MethodePlateau.pierreActuel(JoueurActuel, MethodePlateau.PIERRENOIRE, MethodePlateau.PIERREBLANCHE);
-                    if (MethodePlateau.verifierSiPierrePoser(Goban, x, y, pierre)) {
+                    pierre = MethodePlateau.pierreActuel(JoueurActuel);
 
-                        // place le pion du joueur au coordonné choisis.
+                    // MAJ : verifierSiPierrePoser ne prend plus 'pierre' en argument (plus besoin)
+                    if (MethodePlateau.verifierSiPierrePoser(Goban, x, y)) {
 
-                        MethodePlateau.poserPierre(Goban, x, y, pierre, JoueurActuel);
+                        // A. On pose la pierre (poserPierre prend 4 arguments maintenant)
+                        MethodePlateau.poserPierre(Goban, x, y, pierre);
 
-                        // ameliorer car on a deja changerjoueur
-                        char ennemi;
-                        if (pierre == MethodePlateau.PIERRENOIRE) {
-                            ennemi = MethodePlateau.PIERREBLANCHE;
-                        } else {
-                            ennemi = MethodePlateau.PIERRENOIRE;
-                        }
+                        // B. GESTION DES CAPTURES (Attaque)
 
-                        // PRÉPARER LES 4 VOISINS (Nord, Sud, Est, Ouest)
-                        // On met leurs coordonnées dans un petit tableau pour pouvoir faire une boucle
-                        int[][] voisins = {
-                                {x, y - 1}, // Nord
-                                {x, y + 1}, // Sud
-                                {x - 1, y}, // Ouest
-                                {x + 1, y}  // Est
-                        };
+                        // MAJ : On définit l'ennemi avec les constantes entières NOIR/BLANC
+                        int ennemi = (pierre == MethodePlateau.NOIR) ? MethodePlateau.BLANC : MethodePlateau.NOIR;
 
-                        //on regarde pour chaque voisin
+                        int[][] voisins = {{x, y - 1}, {x, y + 1}, {x - 1, y}, {x + 1, y}};
+
                         for (int i = 0; i < 4; i++) {
-                            int vX = voisins[i][0]; // Coordonnée X du voisin
-                            int vY = voisins[i][1]; // Coordonnée Y du voisin
+                            int vX = voisins[i][0];
+                            int vY = voisins[i][1];
 
-                            // verifie si ennemie ou en dehors du plateau
                             if (!MethodePlateau.verifierDehorsDesLimites(Goban, vX, vY) && Goban[vX][vY] == ennemi) {
-
-
                                 boolean[][] visiteMemoire = Jeu.CreationTableauGroupeVisitee(Goban);
-
                                 if (Jeu.estGroupeVivant(Goban, vX, vY, ennemi, visiteMemoire) == false) {
-                                    // groupe mort on supprime
                                     System.out.println("Capture !");
                                     Jeu.supprimerGroupe(Goban, vX, vY, ennemi);
                                 }
                             }
                         }
-                        // compte la taille du groupe contenant le pion qui vient d'etre posée
-                        tailleGroupe = Jeu.CompterGroupe(Goban,x,y,pierre,Visitee);
-                        coupValide = true;
+
+                        // C. VÉRIFICATION SUICIDE (Défense)
+                        boolean estSuicide = false;
+                        // On vérifie le suicide APRÈS la capture potentielle
+                        boolean[][] visiteSuicide = Jeu.CreationTableauGroupeVisitee(Goban);
+
+                        if (Jeu.estGroupeVivant(Goban, x, y, pierre, visiteSuicide) == false) {
+                            System.out.println(">> COUP INTERDIT : Suicide !");
+                            // MAJ : On remet la case à VIDE (0)
+                            Goban[x][y] = MethodePlateau.VIDE;
+                            estSuicide = true;
+                        }
+
+                        // D. VALIDATION FINALE
+                        if (estSuicide) {
+                            coupValide = false;
+                        } else {
+                            coupValide = true;
+                            passeTour = 0;
+                            // Optionnel : compter le groupe
+                            boolean[][] VisiteeCompte = Jeu.CreationTableauGroupeVisitee(Goban);
+                            tailleGroupe = Jeu.CompterGroupe(Goban, x, y, pierre, VisiteeCompte);
+                        }
+
                     } else {
-                        // le coup n'est valide.
-                        System.out.println("Ce coup est invalide");
+                        System.out.println(">> ERREUR : Case occupée ou hors limite.");
                         coupValide = false;
                     }
-                    passeTour = 0;
                 }
-                // si les deux joueurs passent leur tour simultanément la boucle principale prend fin
-                if(passeTour == 2){
-                    System.out.println("Vous avez tous deux passer votre tour c'est la fin du JEU");
+
+                // Gestion de la fin de partie
+                if(passeTour >= 2){
+                    System.out.println("Les deux joueurs ont passé. FIN DU JEU.");
                     finDeJeu = true;
+                    coupValide = true;
                 }
 
-            }while(!coupValide);
+            } while(!coupValide && !finDeJeu);
 
-            // une fois le coup joue, on affiche le plateau actuel
+            // Fin du tour, on affiche et on change de joueur
+            if (!finDeJeu) {
+                // MAJ : On utilise la classe Affichage pour dessiner
+                Affichage.AffichageGoban(Goban);
 
-            MethodePlateau.AffichageGoban(Goban);
+                // Petit bonus : affiche la couleur en texte plutôt qu'en chiffre
+                String couleur = (pierre == MethodePlateau.NOIR) ? "NOIR" : "BLANC";
+                System.out.println("Taille du groupe (" + couleur + ") : " + tailleGroupe);
 
-            //
-
-            System.out.println(tailleGroupe + " est la taille de la pierre : " + pierre);
-
-            // changement de joueur a chaque tour
-
-            JoueurActuel = Jeu.changerJoueur(JoueurActuel);
-
+                JoueurActuel = Jeu.changerJoueur(JoueurActuel);
+            }
         }
     }
 }
