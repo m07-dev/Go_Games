@@ -4,13 +4,13 @@ public class Main {
         boolean finDeJeu = false;
         int JoueurActuel = 2;
         int passeTour = 0;
-
-        // MAJ : 'pierre' est maintenant un int (1 ou 2)
-        // La nouvelle fonction pierreActuel ne prend plus que le joueur en paramètre
         int pierre = MethodePlateau.pierreActuel(JoueurActuel);
-
         int tailleGroupe = 1;
         boolean coupValide = false;
+
+        // NOUVEAU : Variables pour compter les prisonniers
+        int capturesNoir = 0;
+        int capturesBlanc = 0;
 
         while (!finDeJeu) {
             do {
@@ -21,7 +21,7 @@ public class Main {
                 int y = coup[1];
 
                 // 1. CAS : LE JOUEUR PASSE
-                if(coup[0] == -1 && coup[1] == -1){
+                if (coup[0] == -1 && coup[1] == -1) {
                     passeTour++;
                     coupValide = true;
                     System.out.println("Le joueur " + JoueurActuel + " passe son tour.");
@@ -33,7 +33,7 @@ public class Main {
                     // MAJ : verifierSiPierrePoser ne prend plus 'pierre' en argument (plus besoin)
                     if (MethodePlateau.verifierSiPierrePoser(Goban, x, y)) {
 
-                        // A. On pose la pierre (poserPierre prend 4 arguments maintenant)
+                        // A. On pose la pierre (poserPierre prend 4 arguments maintenant).
                         MethodePlateau.poserPierre(Goban, x, y, pierre);
 
                         // B. GESTION DES CAPTURES (Attaque)
@@ -51,7 +51,15 @@ public class Main {
                                 boolean[][] visiteMemoire = Jeu.CreationTableauGroupeVisitee(Goban);
                                 if (Jeu.estGroupeVivant(Goban, vX, vY, ennemi, visiteMemoire) == false) {
                                     System.out.println("Capture !");
-                                    Jeu.supprimerGroupe(Goban, vX, vY, ennemi);
+                                    // NOUVEAU : On récupère le nombre de pierres mangées
+                                    int nbPierresMangees = Jeu.supprimerGroupe(Goban, vX, vY, ennemi);
+
+                                    // NOUVEAU : On ajoute au score du joueur actuel
+                                    if (pierre == MethodePlateau.NOIR) {
+                                        capturesNoir += nbPierresMangees;
+                                    } else {
+                                        capturesBlanc += nbPierresMangees;
+                                    }
                                 }
                             }
                         }
@@ -85,26 +93,32 @@ public class Main {
                     }
                 }
 
-                // Gestion de la fin de partie
-                if(passeTour >= 2){
+                // Gestion de la fin de partie passerTour ou le Goban est rempli
+                if (passeTour >= 2) {
                     System.out.println("Les deux joueurs ont passé. FIN DU JEU.");
                     finDeJeu = true;
                     coupValide = true;
-                }
+                } else if (MethodePlateau.GobanRempli(Goban)) {
+                    System.out.println("Le plateau est complet ! FIN DU JEU.");
+                    finDeJeu = true;
+                    coupValide = true;
 
+                }
             } while(!coupValide && !finDeJeu);
 
-            // Fin du tour, on affiche et on change de joueur
             if (!finDeJeu) {
-                // MAJ : On utilise la classe Affichage pour dessiner
                 Affichage.AffichageGoban(Goban);
-
-                // Petit bonus : affiche la couleur en texte plutôt qu'en chiffre
-                String couleur = (pierre == MethodePlateau.NOIR) ? "NOIR" : "BLANC";
-                System.out.println("Taille du groupe (" + couleur + ") : " + tailleGroupe);
+                // NOUVEAU : On peut afficher les prisonniers à chaque tour
+                System.out.println("Prisonniers - Noir: " + capturesNoir + " | Blanc: " + capturesBlanc);
 
                 JoueurActuel = Jeu.changerJoueur(JoueurActuel);
             }
         }
+
+        // --- FIN DU JEU ---
+
+        // Le calcul final
+        System.out.println("Calcul du score final...");
+        Jeu.calculerScoreFinal(Goban, capturesNoir, capturesBlanc);
     }
 }
