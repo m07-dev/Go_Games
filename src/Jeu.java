@@ -17,11 +17,11 @@ public class Jeu {
     public static int[] demanderCoup(int JoueurActuel, int[][] Goban) {
         int x;
         int y;
-        Scanner sc = new Scanner(System.in); // Mieux vaut le déclarer ici
+        Scanner sc = new Scanner(System.in);
         do {
-            System.out.println("Joueur n°" + JoueurActuel + " , Tapez un coup pour la position X OU taper -1 pour PASSER ?");
+            System.out.println("Joueur n°" + JoueurActuel + " , Tapez un coup pour la position Y OU taper -1 pour PASSER ?");
             x = sc.nextInt();
-            System.out.println("Joueur n°" + JoueurActuel + ", Tapez un coup pour la position Y OU taper -1 pour PASSER ?");
+            System.out.println("Joueur n°" + JoueurActuel + ", Tapez un coup pour la position X OU taper -1 pour PASSER ?");
             y = sc.nextInt();
         } while (x < -1 || x >= Goban.length || y < -1 || y >= Goban.length);
 
@@ -97,8 +97,74 @@ public class Jeu {
             return 0;
         }
 
-        Goban[x][y] = MethodePlateau.SUICIDE;
+        Goban[x][y] = MethodePlateau.VIDE;
 
         return 1 + supprimerGroupe(Goban,x+1,y,pierre) + supprimerGroupe(Goban,x-1,y,pierre) + supprimerGroupe(Goban,x,y+1,pierre) + supprimerGroupe(Goban,x,y-1,pierre);
+    }
+
+    // Fonction principale à appeler à la fin du jeu
+    public static void calculerScoreFinal(int[][] Goban, int capturesNoir, int capturesBlanc) {
+        boolean[][] visite = new boolean[Goban.length][Goban.length];
+        double scoreFinalNoir = capturesNoir;
+        double scoreFinalBlanc = capturesBlanc + 0.5; // Point supplémentaire attribuée au blanc
+
+        for (int x = 0; x < Goban.length; x++) {
+            for (int y = 0; y < Goban.length; y++) {
+                // On cherche les zones VIDES non visitées
+                if (Goban[x][y] == MethodePlateau.VIDE && !visite[x][y]) {
+
+                    // On prépare un petit objet ou tableau pour récupérer les infos de la zone
+                    // result[0] = taille, result[1] = toucheNoir (1=oui), result[2] = toucheBlanc (1=oui)
+                    int[] resultatZone = {0, 0, 0};
+                    CalculTailleZoneVide(Goban, x, y, visite, resultatZone);
+
+                    int tailleZone = resultatZone[0];
+                    boolean toucheNoir = resultatZone[1] > 0;
+                    boolean toucheBlanc = resultatZone[2] > 0;
+
+                    if (toucheNoir && !toucheBlanc) {
+                        scoreFinalNoir += tailleZone;
+                        System.out.println("Territoire Noir détecté de taille " + tailleZone);
+                    } else if (toucheBlanc && !toucheNoir) {
+                        scoreFinalBlanc += tailleZone;
+                        System.out.println("Territoire Blanc détecté de taille " + tailleZone);
+                    } else {
+                        System.out.println("Zone neutre (Dame) de taille " + tailleZone);
+                    }
+                }
+            }
+        }
+        System.out.println("FIN DE PARTIE !");
+        System.out.println("Score Noir : " + scoreFinalNoir);
+        System.out.println("Score Blanc : " + scoreFinalBlanc);
+        if (scoreFinalNoir > scoreFinalBlanc) System.out.println("NOIR GAGNE !");
+        else System.out.println("BLANC GAGNE !");
+    }
+
+    // Fonction récursive pour explorer une zone vide
+    public static void CalculTailleZoneVide(int[][] Goban, int x, int y, boolean[][] visite, int[] resultat) {
+        // Si hors limites ou déjà visité (pour les cases vides), on arrête
+        if (MethodePlateau.verifierDehorsDesLimites(Goban, x, y)) return;
+        if (visite[x][y]) return;
+
+        // Si c'est une PIERRE, on note juste la couleur et on s'arrête (c'est une frontière)
+        if (Goban[x][y] == MethodePlateau.NOIR) {
+            resultat[1] = 1; // Touche Noir
+            return;
+        }
+        if (Goban[x][y] == MethodePlateau.BLANC) {
+            resultat[2] = 1; // Touche Blanc
+            return;
+        }
+
+        // C'est une case VIDE non visitée : on la compte !
+        visite[x][y] = true;
+        resultat[0]++; // +1 taille
+
+        // Appel récursif
+        CalculTailleZoneVide(Goban, x + 1, y, visite, resultat);
+        CalculTailleZoneVide(Goban, x - 1, y, visite, resultat);
+        CalculTailleZoneVide(Goban, x, y + 1, visite, resultat);
+        CalculTailleZoneVide(Goban, x, y - 1, visite, resultat);
     }
 }
