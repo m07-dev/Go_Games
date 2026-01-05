@@ -1,7 +1,7 @@
 public class Affichage {
 
-    static final String SYMBOLE_NOIR = "☗";
-    static final String SYMBOLE_BLANC = "☖";
+    static final String SYMBOLE_NOIR = "●";
+    static final String SYMBOLE_BLANC = "○";
 
     // La méthode principale est maintenant très courte et lisible !
     public static void AffichageGoban(int[][] plateau) {
@@ -20,7 +20,7 @@ public class Affichage {
     }
 
     // Méthode 1 : Affiche les numéros de colonnes (0, 1, 2...) tout en haut
-    private static void afficherEnTete(int taille) {
+    public static void afficherEnTete(int taille) {
         System.out.print("   "); // Espace initial pour s'aligner avec les numéros de ligne
         for (int i = 0; i < taille; i++) {
             // "   " ou "  " sert à garder l'alignement si le chiffre > 9
@@ -30,7 +30,7 @@ public class Affichage {
     }
 
     // Méthode 2 : Affiche une ligne complète (Numéro + Pierres + Traits horizontaux)
-    private static void afficherLigneDeJeu(int[] lignePlateau, int numeroLigne, int taille) {
+    public static void afficherLigneDeJeu(int[] lignePlateau, int numeroLigne, int taille) {
         // Affichage du numéro de ligne à gauche
         System.out.print(numeroLigne + (numeroLigne < 10 ? "  " : " "));
 
