@@ -1,5 +1,4 @@
 public class Main {
-    // Note : On reçoit maintenant un int[][] (tableau d'entiers)
     public static void lancerPartie(int[][] Goban,String nomJ1, String nomJ2) {
         boolean finDeJeu = false;
         int JoueurActuel = 2;
@@ -9,12 +8,11 @@ public class Main {
         boolean coupValide = false;
         int capturesNoir = 0;
         int capturesBlanc = 0;
-
+        // Boucle qui gére la partie
         while (!finDeJeu) {
-            String nomActuel = (JoueurActuel == 1) ? nomJ1 : nomJ2;
+            String nomActuel = (JoueurActuel == 1) ? nomJ1 : nomJ2; // if sur une seul ligne ( vue en doc )
+            // demande de saisie du coup et verification si celui si est valide ,et enregistre l'impact  qu'il aura sur le jeu
             do {
-                // boolean[][] Visitee = Jeu.CreationTableauGroupeVisitee(Goban);
-
                 int[] coup = Jeu.demanderCoup(nomActuel, Goban);
                 int x = coup[0];
                 int y = coup[1];
@@ -37,7 +35,6 @@ public class Main {
 
                         // Voir la capture
 
-
                         int ennemi;
                         if (pierre == MethodePlateau.NOIR) {
                             ennemi = MethodePlateau.BLANC;
@@ -53,7 +50,7 @@ public class Main {
 
                             if (!MethodePlateau.verifierDehorsDesLimites(Goban, vX, vY) && Goban[vX][vY] == ennemi) {
                                 boolean[][] visiteMemoire = Jeu.CreationTableauGroupeVisitee(Goban);
-                                if (Jeu.estGroupeVivant(Goban, vX, vY, ennemi, visiteMemoire) == false) {
+                                if (!Jeu.estGroupeVivant(Goban, vX, vY, ennemi, visiteMemoire)) {
                                     System.out.println("Capture !");
                                     // On récupère le nombre de pierres capturé
                                     int nbPierresMangees = Jeu.supprimerGroupe(Goban, vX, vY, ennemi);
@@ -73,9 +70,9 @@ public class Main {
                         // On vérifie le suicide après la capture potentielle
                         boolean[][] visiteSuicide = Jeu.CreationTableauGroupeVisitee(Goban);
 
-                        if (Jeu.estGroupeVivant(Goban, x, y, pierre, visiteSuicide) == false) {
+                        if (!Jeu.estGroupeVivant(Goban, x, y, pierre, visiteSuicide)) {
                             System.out.println(">> COUP INTERDIT : Suicide !");
-                            // MAJ : On remet la case à VIDE (0)
+                            // On remet la case à VIDE (0)
                             Goban[x][y] = MethodePlateau.VIDE;
                             estSuicide = true;
                         }
@@ -85,9 +82,6 @@ public class Main {
                         } else {
                             coupValide = true;
                             passeTour = 0;
-                            // Optionnel : compter le groupe
-                            boolean[][] VisiteeCompte = Jeu.CreationTableauGroupeVisitee(Goban);
-                            tailleGroupe = Jeu.CompterGroupe(Goban, x, y, pierre, VisiteeCompte);
                         }
 
                     } else {
@@ -96,7 +90,7 @@ public class Main {
                     }
                 }
 
-                // Gestion de la fin de partie passerTour ou le Goban est rempli
+                // Si les deux joueurs passe leur tour la partie prend fin
                 if (passeTour >= 2) {
                     System.out.println("Les deux joueurs ont passé. FIN DU JEU.");
                     finDeJeu = true;
@@ -111,16 +105,14 @@ public class Main {
 
             if (!finDeJeu) {
                 Affichage.AffichageGoban(Goban);
-                //On peut afficher les prisonniers à chaque tour
+                // Affichage Des prisonniers à chaque tour
                 System.out.println("Prisonniers - Noir: " + capturesNoir + " | Blanc: " + capturesBlanc);
 
                 JoueurActuel = Jeu.changerJoueur(JoueurActuel);
             }
         }
 
-        // --- FIN DU JEU ---
-
-        // Le calcul final
+        // Calcul du score final puis affichage des resultats
         System.out.println("Calcul du score final...");
         Jeu.calculerScoreFinal(Goban, capturesNoir, capturesBlanc, nomJ1, nomJ2);
     }
