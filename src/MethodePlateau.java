@@ -1,7 +1,7 @@
 public class MethodePlateau {
 
     // Définition des constantes
-    // 0 = Vide, 1 = Noir, 2 = Blanc
+    // 0 = Vide, 1 = Noir, 2 = Blanc, 3 = SUICIDE
     public static final int VIDE = 0;
     public static final int NOIR = 1;
     public static final int BLANC = 2;
@@ -47,7 +47,7 @@ public class MethodePlateau {
         return !verifierDehorsDesLimites(plateau, x, y) && EmplacementVide(plateau, x, y);
     }
 
-    // Procédure qui place le chiffre du joueur (1 ou 2) aux coordonnées demandées
+    // Methode qui place le chiffre du joueur (1 ou 2) aux coordonnées demandées
     public static void poserPierre(int[][] plateau, int x, int y, int pierre) {
         if (verifierSiPierrePoser(plateau, x, y)) {
             plateau[x][y] = pierre;
