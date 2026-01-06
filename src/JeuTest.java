@@ -11,7 +11,7 @@ public class JeuTest {
         assertFalse(Jeu.changerJoueur(1) == 1);
     }
 
-    // test si une pierre qui n'est pas entoure est bien vivante
+    // test si une pierre qui n'est pas entouré est bien vivante
     @Test
     void testPierreSeuleEstVivante() {
         int[][] plateau = new int[9][9];
@@ -21,7 +21,7 @@ public class JeuTest {
         assertTrue(Jeu.estGroupeVivant(plateau, 4, 4, 1, visite));
     }
 
-    // test si une piece entourée est bien capture
+    // test si une piece entourée est bien capturé
     @Test
     void testPierreEntoureeEstMorte() {
         int[][] plateau = new int[9][9];
@@ -43,7 +43,7 @@ public class JeuTest {
         plateau[4][4] = 1;
         plateau[4][5] = 1;
 
-        // On entoure pas totalement la première pierre
+        // On n'entoure pas totalement la première pierre
         plateau[3][4] = 2;
         plateau[5][4] = 2;
         plateau[4][3] = 2;

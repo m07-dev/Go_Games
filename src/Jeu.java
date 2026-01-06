@@ -86,7 +86,7 @@ public class Jeu {
         return nord || sud || est || ouest;
     }
 
-    // Retire un groupe de pierres du plateau si il n'a plus de liberté et renvoie le total supprimé
+    // Retire un groupe de pierres du plateau s'il n'a plus de liberté et renvoie le total supprimé
     public static int supprimerGroupe(int[][] Goban, int x, int y, int pierre){
         if(MethodePlateau.verifierDehorsDesLimites(Goban,x,y)){
             return 0;
@@ -119,12 +119,12 @@ public class Jeu {
 
                     if (toucheNoir && !toucheBlanc) {
                         scoreFinalNoir += tailleZone;
-                        System.out.println("Territoire Noir détecté de taille " + tailleZone);
+
                     } else if (toucheBlanc && !toucheNoir) {
                         scoreFinalBlanc += tailleZone;
-                        System.out.println("Territoire Blanc détecté de taille " + tailleZone);
+
                     } else {
-                        System.out.println("Zone neutre (Dame) de taille " + tailleZone);
+
                     }
                 }
             }
