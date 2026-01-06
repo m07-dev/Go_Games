@@ -7,13 +7,13 @@ public class launcher {
         int BoutonLancer;
         int taille;
 
-        // MAJ 1 : On utilise les nouvelles constantes entières (BLANC/NOIR)
+
         int pierre_blanc = MethodePlateau.BLANC;
         int pierre_noir = MethodePlateau.NOIR;
 
         System.out.println();
 
-        // Affichage du TITRE du Jeu
+        // Affichage du TITRE du jeu
         System.out.println("                                                                         █████████     ███████    ███████████    █████████   ██████   █████\n" +
                 "                                                                        ███▒▒▒▒▒███  ███▒▒▒▒▒███ ▒▒███▒▒▒▒▒███  ███▒▒▒▒▒███ ▒▒██████ ▒▒███ \n" +
                 "                                                                       ███     ▒▒▒  ███     ▒▒███ ▒███    ▒███ ▒███    ▒███  ▒███▒███ ▒███ \n" +
@@ -32,8 +32,12 @@ public class launcher {
             System.out.println("                                                                        Bienvenue dans GoGames : appuyez sur 1 pour lancer une partie de GO ");
             BoutonLancer = sc.nextInt();
         } while (BoutonLancer != 1);
+        System.out.println("Entrez le prénom du Joueur 1 (Blancs) :");
+        String nomJ1 = sc.next();
 
-        // demande la taille du plateau sur lequel le joueur veux jouer
+        System.out.println("Entrez le prénom du Joueur 2 (Noirs) :");
+        String nomJ2 = sc.next();
+        // demande la taille du plateau sur lequel le joueur veut jouer
         do {
             System.out.println("Sur un plateau de quelle taille voulez vous jouez : 9, 13, 19 ");
             taille = sc.nextInt();
@@ -47,15 +51,15 @@ public class launcher {
         System.out.println("Voici le plateau sur le quelle vous allez jouer ");
         System.out.println();
 
-        // MAJ 2 : Le plateau est maintenant un tableau d'entiers (int[][])
+        // le tableau d'entiers
         int[][] Goban = MethodePlateau.creationGoban(taille);
 
-        // MAJ 3 : On utilise la nouvelle classe Affichage
+       // on affiche
         Affichage.AffichageGoban(Goban);
 
         System.out.println();
 
         // lancement de la partie
-        Main.lancerPartie(Goban);
+        Main.lancerPartie(Goban, nomJ1, nomJ2);
     }
 }

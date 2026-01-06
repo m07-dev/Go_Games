@@ -3,7 +3,7 @@ public class Affichage {
     static final String SYMBOLE_NOIR = "●";
     static final String SYMBOLE_BLANC = "○";
 
-    // La méthode principale est maintenant très courte et lisible !
+    // La méthode d'affichage
     public static void AffichageGoban(int[][] plateau) {
         int taille = plateau.length;
 
@@ -19,17 +19,17 @@ public class Affichage {
         }
     }
 
-    // Méthode 1 : Affiche les numéros de colonnes (0, 1, 2...) tout en haut
+    //Affiche les numéros de colonnes (0, 1, 2...) tout en haut
     public static void afficherEnTete(int taille) {
         System.out.print("   "); // Espace initial pour s'aligner avec les numéros de ligne
         for (int i = 0; i < taille; i++) {
             // "   " ou "  " sert à garder l'alignement si le chiffre > 9
-            System.out.print(i + (i < 10 ? "    " : "   "));
+            System.out.print(i + (i < 10 ? "    " : "   ")); // if en une seule ligne
         }
         System.out.println();
     }
 
-    // Méthode 2 : Affiche une ligne complète (Numéro + Pierres + Traits horizontaux)
+    // Affiche une ligne complète (Numéro + Pierres + Traits horizontaux)
     public static void afficherLigneDeJeu(int[] lignePlateau, int numeroLigne, int taille) {
         // Affichage du numéro de ligne à gauche
         System.out.print(numeroLigne + (numeroLigne < 10 ? "  " : " "));
@@ -48,7 +48,7 @@ public class Affichage {
         System.out.println(); // Retour à la ligne à la fin de la rangée
     }
 
-    // Méthode 3 : Affiche les barres verticales entre les lignes ("|    |")
+    // Affiche les barres verticales entre les lignes ("|    |")
     public static void afficherInterLigne(int taille) {
         System.out.print("   "); // Espace pour s'aligner sous les pierres
         for (int j = 0; j < taille; j++) {
@@ -57,7 +57,7 @@ public class Affichage {
         System.out.println();
     }
 
-    // Méthode 4 : Choisit ce qu'on doit dessiner dans la case (Noir, Blanc, ou Intersection ?)
+    // Choisit ce qu'on doit dessiner dans la case (Noir, Blanc, ou Intersection ?)
     public static String recupererSymbole(int valeurCase, int ligne, int col, int taille) {
         if (valeurCase == MethodePlateau.NOIR) {
             return SYMBOLE_NOIR;
@@ -69,7 +69,7 @@ public class Affichage {
         }
     }
 
-    // Méthode 5 : Gère la logique des traits du plateau (Coins et Bords)
+    // Gère la logique des traits du plateau (Coins et Bords)
     public static String getTraitPlateau(int ligne, int col, int taille) {
         // Première ligne (Haut)
         if (ligne == 0) {

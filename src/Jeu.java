@@ -1,8 +1,6 @@
 import java.util.Scanner;
 
 public class Jeu {
-    public static void main(String[] args) {
-    }
 
     public static int changerJoueur(int JoueurActuel){
         if(JoueurActuel == 1){
@@ -13,22 +11,22 @@ public class Jeu {
         return JoueurActuel;
     }
 
-    // MAJ : On prend un int[][] au lieu de char[][]
-    public static int[] demanderCoup(int JoueurActuel, int[][] Goban) {
+    // On prend en int[][] pour demander les coups
+    public static int[] demanderCoup(String nomJoueur, int[][] Goban) {
         int x;
         int y;
         Scanner sc = new Scanner(System.in);
         do {
-            System.out.println("Joueur n°" + JoueurActuel + " , Tapez un coup pour la position Y OU taper -1 pour PASSER ?");
+            System.out.println(nomJoueur + ", Tapez un coup pour la position Y OU taper -1 pour PASSER ?");
             x = sc.nextInt();
-            System.out.println("Joueur n°" + JoueurActuel + ", Tapez un coup pour la position X OU taper -1 pour PASSER ?");
+            System.out.println(nomJoueur + ", Tapez un coup pour la position X OU taper -1 pour PASSER ?");
             y = sc.nextInt();
-        } while (x < -1 || x >= Goban.length || y < -1 || y >= Goban.length);
+        } while (x < -1 || x >= Goban.length || y < -1 || y >= Goban.length); // mettre à -1 pour compter les passes
 
         return new int[]{x, y};
     }
 
-    // MAJ : int[][]
+    // Fonction qui permet de savoir si un groupe a été visité ou pas
     public static boolean[][] CreationTableauGroupeVisitee(int[][] Goban){
         boolean[][] Visitee = new boolean[Goban.length][Goban.length];
         for (int i = 0; i < Goban.length; i++) {
@@ -39,7 +37,7 @@ public class Jeu {
         return Visitee;
     }
 
-    // MAJ : int[][] et int pierre
+    // Fonction qui permet de compter le groupe de pierre avec
     public static int CompterGroupe(int[][] Goban, int x, int y, int pierre, boolean[][] GroupeVisitee){
         if (MethodePlateau.verifierDehorsDesLimites(Goban,x,y)){
             return 0;
@@ -60,7 +58,7 @@ public class Jeu {
         return taille;
     }
 
-    // MAJ : int[][] et int pierre
+    // Fonctionn qui permet de savoir si un groupe est vivant c.-à-d. Si dans le groupe, ont au moins un case vide
     public static boolean estGroupeVivant(int[][] Goban, int x, int y, int pierre, boolean[][] Visitee){
         if(MethodePlateau.verifierDehorsDesLimites(Goban,x,y)){
             return false;
@@ -88,7 +86,7 @@ public class Jeu {
         return nord || sud || est || ouest;
     }
 
-    // MAJ : int[][] et int pierre
+    // Fonction qui permet de supprimer un groupe de pierre
     public static int supprimerGroupe(int[][] Goban, int x, int y, int pierre){
         if(MethodePlateau.verifierDehorsDesLimites(Goban,x,y)){
             return 0;
@@ -102,18 +100,18 @@ public class Jeu {
         return 1 + supprimerGroupe(Goban,x+1,y,pierre) + supprimerGroupe(Goban,x-1,y,pierre) + supprimerGroupe(Goban,x,y+1,pierre) + supprimerGroupe(Goban,x,y-1,pierre);
     }
 
-    // Fonction principale à appeler à la fin du jeu
-    public static void calculerScoreFinal(int[][] Goban, int capturesNoir, int capturesBlanc) {
+    // Fonction principale appelée à la fin du jeu
+    public static void calculerScoreFinal(int[][] Goban, int capturesNoir, int capturesBlanc,String nomBlanc, String nomNoir) {
         boolean[][] visite = new boolean[Goban.length][Goban.length];
         double scoreFinalNoir = capturesNoir;
-        double scoreFinalBlanc = capturesBlanc + 0.5; // Point supplémentaire attribuée au blanc
+        double scoreFinalBlanc = capturesBlanc + 0.5; // Point supplémentaire attribuée au blanc -> "KOMI"
 
         for (int x = 0; x < Goban.length; x++) {
             for (int y = 0; y < Goban.length; y++) {
                 // On cherche les zones VIDES non visitées
                 if (Goban[x][y] == MethodePlateau.VIDE && !visite[x][y]) {
 
-                    // On prépare un petit objet ou tableau pour récupérer les infos de la zone
+
                     // result[0] = taille, result[1] = toucheNoir (1=oui), result[2] = toucheBlanc (1=oui)
                     int[] resultatZone = {0, 0, 0};
                     CalculTailleZoneVide(Goban, x, y, visite, resultatZone);
@@ -137,8 +135,11 @@ public class Jeu {
         System.out.println("FIN DE PARTIE !");
         System.out.println("Score Noir : " + scoreFinalNoir);
         System.out.println("Score Blanc : " + scoreFinalBlanc);
-        if (scoreFinalNoir > scoreFinalBlanc) System.out.println("NOIR GAGNE !");
-        else System.out.println("BLANC GAGNE !");
+        if (scoreFinalNoir > scoreFinalBlanc) {
+            System.out.println("BRAVO " + nomNoir.toUpperCase() + " ! TU AS GAGNÉ !");
+        } else {
+            System.out.println("BRAVO " + nomBlanc.toUpperCase() + " ! TU AS GAGNÉ !");
+        }
     }
 
     // Fonction récursive pour explorer une zone vide

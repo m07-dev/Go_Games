@@ -1,6 +1,6 @@
 public class MethodePlateau {
 
-    // Définition des constantes pour rendre le code lisible
+    // Définition des constantes
     // 0 = Vide, 1 = Noir, 2 = Blanc
     public static final int VIDE = 0;
     public static final int NOIR = 1;
@@ -23,7 +23,7 @@ public class MethodePlateau {
     }
 
     // Fonction qui retourne le chiffre associé au joueur actuel
-    // Joueur 1 -> 1 (Noir), Joueur 2 -> 2 (Blanc)
+    // Joueur 1 → 1 (Noir), Joueur 2 -> 2 (Blanc)
     public static int pierreActuel(int JoueurActuel) {
         if (JoueurActuel == 1) {
             return NOIR;

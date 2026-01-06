@@ -1,45 +1,49 @@
 public class Main {
     // Note : On reçoit maintenant un int[][] (tableau d'entiers)
-    public static void lancerPartie(int[][] Goban) {
+    public static void lancerPartie(int[][] Goban,String nomJ1, String nomJ2) {
         boolean finDeJeu = false;
         int JoueurActuel = 2;
         int passeTour = 0;
         int pierre = MethodePlateau.pierreActuel(JoueurActuel);
         int tailleGroupe = 1;
         boolean coupValide = false;
-
-        // NOUVEAU : Variables pour compter les prisonniers
         int capturesNoir = 0;
         int capturesBlanc = 0;
 
         while (!finDeJeu) {
+            String nomActuel = (JoueurActuel == 1) ? nomJ1 : nomJ2;
             do {
                 // boolean[][] Visitee = Jeu.CreationTableauGroupeVisitee(Goban);
 
-                int[] coup = Jeu.demanderCoup(JoueurActuel, Goban);
+                int[] coup = Jeu.demanderCoup(nomActuel, Goban);
                 int x = coup[0];
                 int y = coup[1];
 
-                // 1. CAS : LE JOUEUR PASSE
+                // le joueur passe son tour
                 if (coup[0] == -1 && coup[1] == -1) {
                     passeTour++;
                     coupValide = true;
                     System.out.println("Le joueur " + JoueurActuel + " passe son tour.");
                 }
-                // 2. CAS : LE JOUEUR JOUE
+                // le joueur joue
                 else {
                     pierre = MethodePlateau.pierreActuel(JoueurActuel);
 
-                    // MAJ : verifierSiPierrePoser ne prend plus 'pierre' en argument (plus besoin)
+
                     if (MethodePlateau.verifierSiPierrePoser(Goban, x, y)) {
 
-                        // A. On pose la pierre (poserPierre prend 4 arguments maintenant).
+                        // On pose la pierre
                         MethodePlateau.poserPierre(Goban, x, y, pierre);
 
-                        // B. GESTION DES CAPTURES (Attaque)
+                        // Voir la capture
 
-                        // MAJ : On définit l'ennemi avec les constantes entières NOIR/BLANC
-                        int ennemi = (pierre == MethodePlateau.NOIR) ? MethodePlateau.BLANC : MethodePlateau.NOIR;
+
+                        int ennemi;
+                        if (pierre == MethodePlateau.NOIR) {
+                            ennemi = MethodePlateau.BLANC;
+                        } else {
+                            ennemi = MethodePlateau.NOIR;
+                        }
 
                         int[][] voisins = {{x, y - 1}, {x, y + 1}, {x - 1, y}, {x + 1, y}};
 
@@ -51,10 +55,10 @@ public class Main {
                                 boolean[][] visiteMemoire = Jeu.CreationTableauGroupeVisitee(Goban);
                                 if (Jeu.estGroupeVivant(Goban, vX, vY, ennemi, visiteMemoire) == false) {
                                     System.out.println("Capture !");
-                                    // NOUVEAU : On récupère le nombre de pierres mangées
+                                    // On récupère le nombre de pierres capturé
                                     int nbPierresMangees = Jeu.supprimerGroupe(Goban, vX, vY, ennemi);
 
-                                    // NOUVEAU : On ajoute au score du joueur actuel
+                                    // On ajoute au score du joueur actuel
                                     if (pierre == MethodePlateau.NOIR) {
                                         capturesNoir += nbPierresMangees;
                                     } else {
@@ -64,9 +68,9 @@ public class Main {
                             }
                         }
 
-                        // C. VÉRIFICATION SUICIDE (Défense)
+                        // verification sucide
                         boolean estSuicide = false;
-                        // On vérifie le suicide APRÈS la capture potentielle
+                        // On vérifie le suicide après la capture potentielle
                         boolean[][] visiteSuicide = Jeu.CreationTableauGroupeVisitee(Goban);
 
                         if (Jeu.estGroupeVivant(Goban, x, y, pierre, visiteSuicide) == false) {
@@ -76,7 +80,6 @@ public class Main {
                             estSuicide = true;
                         }
 
-                        // D. VALIDATION FINALE
                         if (estSuicide) {
                             coupValide = false;
                         } else {
@@ -108,7 +111,7 @@ public class Main {
 
             if (!finDeJeu) {
                 Affichage.AffichageGoban(Goban);
-                // NOUVEAU : On peut afficher les prisonniers à chaque tour
+                //On peut afficher les prisonniers à chaque tour
                 System.out.println("Prisonniers - Noir: " + capturesNoir + " | Blanc: " + capturesBlanc);
 
                 JoueurActuel = Jeu.changerJoueur(JoueurActuel);
@@ -119,6 +122,6 @@ public class Main {
 
         // Le calcul final
         System.out.println("Calcul du score final...");
-        Jeu.calculerScoreFinal(Goban, capturesNoir, capturesBlanc);
+        Jeu.calculerScoreFinal(Goban, capturesNoir, capturesBlanc, nomJ1, nomJ2);
     }
 }
