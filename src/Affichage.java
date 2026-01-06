@@ -1,15 +1,16 @@
 public class Affichage {
 
-    static final String SYMBOLE_NOIR = "●";
-    static final String SYMBOLE_BLANC = "○";
+    static final String SYMBOLE_NOIR = "○";
+    static final String SYMBOLE_BLANC = "●";
 
-    // La méthode d'affichage
+    // Méthode qui recois en parametre le plateau de jeu et l'affiche
     public static void AffichageGoban(int[][] plateau) {
         int taille = plateau.length;
-
-        afficherEnTete(taille);
+        // appel de la méthode qui affiche les coordonnées X
+        afficherCoordX(taille);
 
         for (int i = 0; i < taille; i++) {
+
             afficherLigneDeJeu(plateau[i], i, taille);
 
             // On affiche les barres verticales sauf après la dernière ligne
@@ -20,11 +21,11 @@ public class Affichage {
     }
 
     //Affiche les numéros de colonnes (0, 1, 2...) tout en haut
-    public static void afficherEnTete(int taille) {
+    public static void afficherCoordX(int taille) {
         System.out.print("   "); // Espace initial pour s'aligner avec les numéros de ligne
         for (int i = 0; i < taille; i++) {
             // "   " ou "  " sert à garder l'alignement si le chiffre > 9
-            System.out.print(i + (i < 10 ? "    " : "   ")); // if en une seule ligne
+            System.out.print(i + (i < 10 ? "    " : "   ")); // if en une seule ligne vu dans une documentation
         }
         System.out.println();
     }
@@ -32,7 +33,13 @@ public class Affichage {
     // Affiche une ligne complète (Numéro + Pierres + Traits horizontaux)
     public static void afficherLigneDeJeu(int[] lignePlateau, int numeroLigne, int taille) {
         // Affichage du numéro de ligne à gauche
-        System.out.print(numeroLigne + (numeroLigne < 10 ? "  " : " "));
+        if (numeroLigne < 10) {
+            // Si le chiffre est petit (0-9), on met 2 espaces pour ne pas avoir de décalage pendant l'affichage
+            System.out.print(numeroLigne + "  ");
+        } else {
+            // Si le nombre a deux chiffres (10+), on ne met qu'un seul espace
+            System.out.print(numeroLigne + " ");
+        }
 
         for (int col = 0; col < taille; col++) {
             // On récupère le bon symbole (Pierre ou Trait)
@@ -57,7 +64,7 @@ public class Affichage {
         System.out.println();
     }
 
-    // Choisit ce qu'on doit dessiner dans la case (Noir, Blanc, ou Intersection ?)
+    // Choisit ce qu'on doit dessiner dans la case (Noir, Blanc, ou Intersection )
     public static String recupererSymbole(int valeurCase, int ligne, int col, int taille) {
         if (valeurCase == MethodePlateau.NOIR) {
             return SYMBOLE_NOIR;
@@ -65,12 +72,12 @@ public class Affichage {
             return SYMBOLE_BLANC;
         } else {
             // Si c'est vide, on dessine l'intersection appropriée (coin, bord, centre)
-            return getTraitPlateau(ligne, col, taille);
+            return RecupereLeCaractereDuTableau(ligne, col, taille);
         }
     }
 
-    // Gère la logique des traits du plateau (Coins et Bords)
-    public static String getTraitPlateau(int ligne, int col, int taille) {
+    // Fonction qui retourne le caractere associe a l'intersection du tableau que l'on veut afficher
+    public static String RecupereLeCaractereDuTableau(int ligne, int col, int taille) {
         // Première ligne (Haut)
         if (ligne == 0) {
             if (col == 0) return "┌";           // Coin Haut-Gauche
