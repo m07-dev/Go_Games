@@ -5,7 +5,6 @@ public class MethodePlateau {
     public static final int VIDE = 0;
     public static final int NOIR = 1;
     public static final int BLANC = 2;
-    public static final int SUICIDE = 3;
 
 
 
@@ -34,7 +33,7 @@ public class MethodePlateau {
 
     // Fonction qui retourne vrai si l'emplacement aux coordonnées x et y est vide OU PIERRE SUPPRIMER(vaut 0)
     public static boolean EmplacementVide(int[][] plateau, int x, int y) {
-        return plateau[x][y] == VIDE || plateau[x][y] == SUICIDE;
+        return plateau[x][y] == VIDE;
     }
 
     // Fonction qui retourne vrai si l'emplacement choisi est en dehors du tableau
